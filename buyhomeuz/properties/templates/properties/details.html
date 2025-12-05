@@ -1,0 +1,89 @@
+{% extends 'base.html' %} {% block title %}{{ property.title }}Details{%endblock %} {% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'properties:listing' %}">Properties</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {{ property.title }}
+    </li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h1>{{ property.title }}</h1>
+    </div>
+    <h3 class="text-primary mb-3">
+      ${{ property.price }}
+      <span class="badge bg-secondary"
+        >{{ property.get_listing_type_display}}</span
+      >
+    </h3>
+
+    {% if property.image %}
+    <div class="image mb-4">
+      <img
+        src="{{ property.image.url }}"
+        class="prop-image-details d-block w-100"
+        alt="Property Image"
+      />
+    </div>
+    {% else %}
+    <div class="bg-secondary text-white d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+      Empty
+    </div>
+    {% endif %}
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Description</h5>
+        <p class="card-text">{{ property.description|linebreaks }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-header fs-4">Details</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <strong>District:</strong> {{ property.district }}
+        </li>
+        <li class="list-group-item">
+          <strong>Address:</strong> {{ property.street }}
+          {{property.house_number }}
+        </li>
+        <li class="list-group-item">
+          <strong>Beds:</strong> {{ property.beds }}
+        </li>
+        <li class="list-group-item">
+          <strong>Baths:</strong> {{ property.bathrooms }}
+        </li>
+        <li class="list-group-item">
+          <strong>Area:</strong> {{ property.area_sqm }} m²
+        </li>
+        <li class="list-group-item">
+          <strong>Provider:</strong> {{ property.provider_name }}
+        </li>
+        <li class="list-group-item">
+          <strong>Listed:</strong> {{ property.created_on|date:"M d, Y" }}
+        </li>
+      </ul>
+      <div class="card-body">
+        <a
+          {% if user.is_authenticated %}
+          href="{% url 'appointments:book' property.id %}"
+          {% else %}
+          href="{% url 'accounts:login' %}?next={{ request.path }}"
+          {% endif %}
+          class="btn btn-success w-100 btn-lg"
+        >
+          <i class="bi bi-calendar-check"></i> Book a Viewing
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

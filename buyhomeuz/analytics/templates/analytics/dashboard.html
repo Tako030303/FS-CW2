@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics Dashboard - BuyHomeUz{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="mt-3">
+    <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
+  </div>
+    <div class="col-12">
+        <h1 class="mb-4 text-center">Analytics Dashboard</h1>
+    </div>
+</div>
+
+<div class="row mb-4 justify-content-center">
+    <div class="col-md-3 mb-3">
+        <div class="card border-primary">
+            <div class="card-body text-center">
+                <h3 class="mt-3">{{ general_stats.total_properties }}</h3>
+                <p class="text-muted mb-0">Total Properties</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-info">
+            <div class="card-body text-center">
+                <h3 class="mt-3">{{ general_stats.total_districts }}</h3>
+                <p class="text-muted mb-0">Districts</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <h3 class="mt-3">${{ general_stats.average_price|floatformat:0|default:"0" }}</h3>
+                <p class="text-muted mb-0">Average Price</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">District Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>District</th>
+                                <th>Properties</th>
+                                <th>Average Price</th>
+                                <th>Min Price</th>
+                                <th>Max Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in district_stats %}
+                            <tr>
+                                <td><strong>{{ stat.district }}</strong></td>
+                                <td>{{ stat.property_count }}</td>
+                                <td class="text-success">${{ stat.avg_price|floatformat:2 }}</td>
+                                <td>${{ stat.min_price|floatformat:2 }}</td>
+                                <td>${{ stat.max_price|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No district data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Manager Appointment Statistics</h5>
+            </div>
+            <div class="card-body">
+                {% if manager_stats %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Manager</th>
+                                <th>Total Appointments</th>
+                                <th>Accepted</th>
+                                <th>Denied</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for manager in manager_stats %}
+                            <tr>
+                                <td>
+                                    <strong>{{ manager.username }}</strong>
+                                </td>
+                                <td><span class="badge bg-primary">{{ manager.total_appointments }}</span></td>
+                                <td><span class="badge bg-success">{{ manager.accepted_count }}</span></td>
+                                <td><span class="badge bg-danger">{{ manager.denied_count }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted mb-0">No manager appointment data available yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
