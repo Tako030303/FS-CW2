@@ -12,7 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'properties:listing' %}">Properties</a>
                 </li>
-                {% if perms.auth.view_user or perms.auth.view_group or perms.properties.view_property %}
+                {% if perms.auth.view_user or perms.auth.view_group%}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:dashboard' %}">Dashboard</a>
                 </li>
